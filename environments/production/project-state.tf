@@ -10,15 +10,22 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
-    bucket  = "tfstate-yourwebsite.com"
-    key     = "terraform.tfstate"
-    region  = "us-east-1"
-    profile = "yourwebsite-prod"
+  # First we need a local state
+	backend "local" {
+	}
 
-    encrypt = true
-    acl     = "private"
-  }
+  # After successful deployment, switch to S3 state
+  # terraform init -migrate-state
+  # ---
+  # backend "s3" {
+  #   bucket  = "tfstate-yourwebsite.com"
+  #   key     = "terraform.tfstate"
+  #   region  = "us-east-1"
+  #   profile = "yourwebsite-prod"
+
+  #   encrypt = true
+  #   acl     = "private"
+  # }
 }
 
 resource "aws_s3_bucket" "_" {
